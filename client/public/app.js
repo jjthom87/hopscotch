@@ -80,11 +80,15 @@ $(document).ready(function(){
 						defaultOption.attr('value', 'all');
 						defaultOption.text("All");
 						select.append(defaultOption);
+						var applicants = [];
+						finalArrTwo.forEach((arr) => {
+							applicants.push(arr.applicant);
+						});
 						var option;
-						finalArrTwo.forEach((app) => {
+						applicants.sort().forEach((app) => {
 							option = $("<option>");
-							option.attr('value', app.applicant);
-							option.text(app.applicant);
+							option.attr('value', app);
+							option.text(app);
 							select.append(option);
 						});
 
@@ -143,7 +147,7 @@ $(document).ready(function(){
 	});
 
 	var trArr = [];
-	var trNames = [];
+	var trNamesAndLicenses = [];
 	var upNum = 0;
 	$(document).on('change', '#applicant-select', () => {
 		if(upNum == 0){
@@ -151,28 +155,117 @@ $(document).ready(function(){
 				trArr.push($(this).find("tr"));
 				var tr = $(this).find("tr");
 				tr.each(function(){
-					trNames.push($(this).find("td").eq(6).text())
+					trNamesAndLicenses.push({name: $(this).find("td").eq(6).text(), license_num: $(this).find("td").eq(5).text()})
 				});
 			});
 			upNum++;
 		}
-		if($('#applicant-select').val() === "all"){
+		if($('#applicant-select').val() === "all" && $('#license-select').val() === "all"){
 			var elements = [];
+
+			$('#license-select').remove();
+			var licenseSelect = $("<select id='license-select'>");
+			licenseSelect.addClass('archie-select');
+			var defaultLicOption = $("<option>");
+			defaultLicOption.attr('value', 'all');
+			defaultLicOption.text("All");
+			licenseSelect.append(defaultLicOption);
+
+			$('#applicant-select').remove();
+			var select = $("<select id='applicant-select'>");
+			select.addClass('archie-select');
+			var defaultOption = $("<option>");
+			defaultOption.attr('value', 'all');
+			defaultOption.text("All");
+			select.append(defaultOption);
+
 			for(var i = 1; i < trArr[0].length; i++){
 				elements.push(trArr[0][i]);
+
+				var option;
+				option = $("<option>");
+				option.attr('value', trNamesAndLicenses[i].name);
+				option.text(trNamesAndLicenses[i].name);
+				select.append(option);
+
+				var licOption;
+				licOption = $("<option>");
+				licOption.attr('value', trNamesAndLicenses[i].license_num);
+				licOption.text(trNamesAndLicenses[i].license_num);
+				licenseSelect.append(licOption);
 			}
+
+			$('#select-div').append(select).append(licenseSelect)
 			$('#tbody').append(elements);	
-		} else {
+		} else if ($('#applicant-select').val() !== "all" && $('#license-select').val() === "all") {
 			var newTr = [];
+			var licenseSelect = $("<select id='license-select'>");
 			for(var i = 0; i < trArr[0].length; i++){
-				if(trNames[i] === $('#applicant-select').val()){
+				if(trNamesAndLicenses[i].name === $('#applicant-select').val()){
 					newTr.push(trArr[0][i]);
+
+					$('#license-select').remove();
+					licenseSelect.addClass('archie-select');
+					var defaultLicOption = $("<option>");
+					defaultLicOption.attr('value', 'all');
+					defaultLicOption.text("All");
+					licenseSelect.append(defaultLicOption);
+					var licOption;
+					licOption = $("<option>");
+					licOption.attr('value', trNamesAndLicenses[i].license_num);
+					licOption.text(trNamesAndLicenses[i].license_num);
+					licenseSelect.append(licOption);
 				}
 			}
+			$('#select-div').append(licenseSelect)
+
 			$("#results-table > tbody").empty();
 			for(var i = 0; i < newTr.length; i++){
 				$('#tbody').append(newTr[i]);
 			}
+		} else {
+			console.log("in here")
+			// var newTr = [];
+			// for(var i = 0; i < trArr[0].length; i++){
+			// 	if(trNamesAndLicenses[i].name === $('#applicant-select').val() && trNamesAndLicenses[i].license_num === $('#license-select').val()){
+			// 		newTr.push(trArr[0][i]);
+			// 		console.log(trNamesAndLicenses[i])
+			// 		$('#applicant-select').remove();
+			// 		var select = $("<select id='applicant-select'>");
+			// 		select.addClass('archie-select');
+			// 		var defaultOption = $("<option>");
+			// 		defaultOption.attr('value', 'all');
+			// 		defaultOption.text("All");
+			// 		select.append(defaultOption);
+			// 		var option;
+
+			// 		option = $("<option>");
+			// 		option.attr('value', trNamesAndLicenses[i].name);
+			// 		option.text(trNamesAndLicenses[i].name);
+			// 		select.append(option);
+
+			// 		$('#license-select').remove();
+			// 		var licenseSelect = $("<select id='license-select'>");
+			// 		licenseSelect.addClass('archie-select');
+			// 		var defaultLicOption = $("<option>");
+			// 		defaultLicOption.attr('value', 'all');
+			// 		defaultLicOption.text("All");
+			// 		licenseSelect.append(defaultLicOption);
+			// 		var licOption;
+			// 		finalArrThree.forEach((app) => {
+			// 			licOption = $("<option>");
+			// 			licOption.attr('value', trNamesAndLicenses[i].license_num);
+			// 			licOption.text(trNamesAndLicenses[i].license_num);
+			// 			licenseSelect.append(licOption);
+			// 		});
+
+			// 	}
+			// }
+
+			// $("#results-table > tbody").empty();
+			// for(var i = 0; i < newTr.length; i++){
+			// 	$('#tbody').append(newTr[i]);
+			// }
 		}
 	});
 
