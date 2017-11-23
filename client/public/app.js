@@ -75,7 +75,7 @@ $(document).ready(function(){
 
 						$('#applicant-select').remove();
 						var select = $("<select id='applicant-select'>");
-						select.addClass('archie-select');
+						select.addClass('form-control archie-select');
 						var defaultOption = $("<option>");
 						defaultOption.attr('value', 'all');
 						defaultOption.text("All");
@@ -94,7 +94,7 @@ $(document).ready(function(){
 
 						$('#license-select').remove();
 						var licenseSelect = $("<select id='license-select'>");
-						licenseSelect.addClass('archie-select');
+						licenseSelect.addClass('form-control archie-select');
 						var defaultLicOption = $("<option>");
 						defaultLicOption.attr('value', 'all');
 						defaultLicOption.text("All");
@@ -108,7 +108,8 @@ $(document).ready(function(){
 						});
 
 
-						$('#select-div').append(select).append(licenseSelect);
+						$('#applicant-select-div').append(select)
+						$('#license-select-div').append(licenseSelect);
 
 						$('#results-table').show();
 						$("#results-table > tbody").empty();
@@ -136,7 +137,7 @@ $(document).ready(function(){
 							$('#tbody').append(newRow)
 						}
 					});
-				}, 5000);
+				}, 6500);
 				$('#loader').show();
 				$('#pac-input').val('');
 				setTimeout(() => {
@@ -149,7 +150,7 @@ $(document).ready(function(){
 	var trArr = [];
 	var trNamesAndLicenses = [];
 	var upNum = 0;
-	$(document).on('change', '#applicant-select', () => {
+	$(document).on('change', '.archie-select', () => {
 		if(upNum == 0){
 			$('#tbody').each(() => {
 				trArr.push($(this).find("tr"));
@@ -160,12 +161,43 @@ $(document).ready(function(){
 			});
 			upNum++;
 		}
+
 		if($('#applicant-select').val() === "all" && $('#license-select').val() === "all"){
+			var tnlDupRem = {};
+			for (var i = 0, n = trNamesAndLicenses.length; i < n; i++) {
+			    var tnlItem = trNamesAndLicenses[i];
+			    tnlDupRem[ tnlItem.name + " - " + tnlItem.license_num ] = tnlItem;
+			}
+			var i = 0;
+			var nonDuplicatedArrayFour = [];    
+			for(var tnlItem in tnlDupRem) {
+			    nonDuplicatedArrayFour[i++] = tnlDupRem[tnlItem];
+			}
+			var trNames = [];
+			var trLicenses = [];
+			for(var i = 0; i < nonDuplicatedArrayFour.length; i++){
+				trNames.push(nonDuplicatedArrayFour[i].name);
+				trLicenses.push(nonDuplicatedArrayFour[i].license_num);
+			}
+
+			var uniqueNames = [];
+			$.each(trNames, function(i, el){
+			    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+			});
+
+			var uniqueLicenses = [];
+			$.each(trLicenses, function(i, el){
+			    if($.inArray(el, uniqueLicenses) === -1) uniqueLicenses.push(el);
+			});
+
+			uniqueNames.sort();
+			uniqueLicenses.sort();
+
 			var elements = [];
 
 			$('#license-select').remove();
 			var licenseSelect = $("<select id='license-select'>");
-			licenseSelect.addClass('archie-select');
+			licenseSelect.addClass('form-control archie-select');
 			var defaultLicOption = $("<option>");
 			defaultLicOption.attr('value', 'all');
 			defaultLicOption.text("All");
@@ -173,7 +205,7 @@ $(document).ready(function(){
 
 			$('#applicant-select').remove();
 			var select = $("<select id='applicant-select'>");
-			select.addClass('archie-select');
+			select.addClass('form-control archie-select');
 			var defaultOption = $("<option>");
 			defaultOption.attr('value', 'all');
 			defaultOption.text("All");
@@ -181,130 +213,132 @@ $(document).ready(function(){
 
 			for(var i = 1; i < trArr[0].length; i++){
 				elements.push(trArr[0][i]);
+			}
 
+			for(var i = 1; i < uniqueNames.length; i++){
 				var option;
 				option = $("<option>");
-				option.attr('value', trNamesAndLicenses[i].name);
-				option.text(trNamesAndLicenses[i].name);
+				option.attr('value', uniqueNames[i]);
+				option.text(uniqueNames[i]);
 				select.append(option);
+			}
 
+			for(var i = 1; i < uniqueLicenses.length; i++){
 				var licOption;
 				licOption = $("<option>");
-				licOption.attr('value', trNamesAndLicenses[i].license_num);
-				licOption.text(trNamesAndLicenses[i].license_num);
+				licOption.attr('value', uniqueLicenses[i]);
+				licOption.text(uniqueLicenses[i]);
 				licenseSelect.append(licOption);
 			}
 
-			$('#select-div').append(select).append(licenseSelect)
+			$('#applicant-select-div').append(select)
+			$('#license-select-div').append(licenseSelect)
 			$('#tbody').append(elements);	
 		} else if ($('#applicant-select').val() !== "all" && $('#license-select').val() === "all") {
 			var newTr = [];
+			$('#license-select').remove();
 			var licenseSelect = $("<select id='license-select'>");
+			licenseSelect.addClass('form-control archie-select');
+			var defaultLicOption = $("<option>");
+			defaultLicOption.attr('value', 'all');
+			defaultLicOption.text("All");
+			licenseSelect.append(defaultLicOption);
+
+			var licArray = [];
 			for(var i = 0; i < trArr[0].length; i++){
 				if(trNamesAndLicenses[i].name === $('#applicant-select').val()){
 					newTr.push(trArr[0][i]);
-
-					$('#license-select').remove();
-					licenseSelect.addClass('archie-select');
-					var defaultLicOption = $("<option>");
-					defaultLicOption.attr('value', 'all');
-					defaultLicOption.text("All");
-					licenseSelect.append(defaultLicOption);
-					var licOption;
-					licOption = $("<option>");
-					licOption.attr('value', trNamesAndLicenses[i].license_num);
-					licOption.text(trNamesAndLicenses[i].license_num);
-					licenseSelect.append(licOption);
+					licArray.push({license_num: trNamesAndLicenses[i].license_num})
 				}
 			}
-			$('#select-div').append(licenseSelect)
+			var licResultThree = {};
+			for (var i = 0, n = licArray.length; i < n; i++) {
+			    var licItem = licArray[i];
+			    licResultThree[ licItem.license_num ] = licItem;
+			}
+			var i = 0;
+			var nonDuplicatedLicArray = [];    
+			for(var licItem in licResultThree) {
+			    nonDuplicatedLicArray[i++] = licResultThree[licItem];
+			}
+
+			var finalLicNonDupArray = [];
+			$.each(nonDuplicatedLicArray, function(i, el){
+			    if($.inArray(el, finalLicNonDupArray) === -1) finalLicNonDupArray.push(el);
+			});
+
+			for(var i = 0; i < finalLicNonDupArray.length; i++){
+				var licOption = $("<option>");
+				licOption.attr('value', finalLicNonDupArray[i].license_num);
+				licOption.text(finalLicNonDupArray[i].license_num);
+				licenseSelect.append(licOption);
+			}
+
+			$('#license-select-div').append(licenseSelect)
 
 			$("#results-table > tbody").empty();
 			for(var i = 0; i < newTr.length; i++){
 				$('#tbody').append(newTr[i]);
 			}
-		} else {
-			console.log("in here")
-			// var newTr = [];
-			// for(var i = 0; i < trArr[0].length; i++){
-			// 	if(trNamesAndLicenses[i].name === $('#applicant-select').val() && trNamesAndLicenses[i].license_num === $('#license-select').val()){
-			// 		newTr.push(trArr[0][i]);
-			// 		console.log(trNamesAndLicenses[i])
-			// 		$('#applicant-select').remove();
-			// 		var select = $("<select id='applicant-select'>");
-			// 		select.addClass('archie-select');
-			// 		var defaultOption = $("<option>");
-			// 		defaultOption.attr('value', 'all');
-			// 		defaultOption.text("All");
-			// 		select.append(defaultOption);
-			// 		var option;
+		} else if ($('#applicant-select').val() === "all" && $('#license-select').val() !== "all") {
+			var newTr = [];
+			$('#applicant-select').remove();
+			var applicantSelect = $("<select id='applicant-select'>");
+			applicantSelect.addClass('form-control archie-select');
+			var defaultAppOption = $("<option>");
+			defaultAppOption.attr('value', 'all');
+			defaultAppOption.text("All");
+			applicantSelect.append(defaultAppOption);
 
-			// 		option = $("<option>");
-			// 		option.attr('value', trNamesAndLicenses[i].name);
-			// 		option.text(trNamesAndLicenses[i].name);
-			// 		select.append(option);
+			var appArray = [];
+			for(var i = 0; i < trArr[0].length; i++){
+				if(trNamesAndLicenses[i].license_num === $('#license-select').val()){
+					newTr.push(trArr[0][i]);
+					appArray.push({applicant: trNamesAndLicenses[i].name})
+				}
+			}
+			var appResultThree = {};
+			for (var i = 0, n = appArray.length; i < n; i++) {
+			    var appItem = appArray[i];
+			    appResultThree[ appItem.applicant ] = appItem;
+			}
+			var i = 0;
+			var nonDuplicatedAppArray = [];    
+			for(var appItem in appResultThree) {
+			    nonDuplicatedAppArray[i++] = appResultThree[appItem];
+			}
 
-			// 		$('#license-select').remove();
-			// 		var licenseSelect = $("<select id='license-select'>");
-			// 		licenseSelect.addClass('archie-select');
-			// 		var defaultLicOption = $("<option>");
-			// 		defaultLicOption.attr('value', 'all');
-			// 		defaultLicOption.text("All");
-			// 		licenseSelect.append(defaultLicOption);
-			// 		var licOption;
-			// 		finalArrThree.forEach((app) => {
-			// 			licOption = $("<option>");
-			// 			licOption.attr('value', trNamesAndLicenses[i].license_num);
-			// 			licOption.text(trNamesAndLicenses[i].license_num);
-			// 			licenseSelect.append(licOption);
-			// 		});
+			var finalAppNonDupArray = [];
+			$.each(nonDuplicatedAppArray, function(i, el){
+			    if($.inArray(el, finalAppNonDupArray) === -1) finalAppNonDupArray.push(el);
+			});
 
-			// 	}
-			// }
+			for(var i = 0; i < finalAppNonDupArray.length; i++){
+				var appOption = $("<option>");
+				appOption.attr('value', finalAppNonDupArray[i].applicant);
+				appOption.text(finalAppNonDupArray[i].applicant);
+				applicantSelect.append(appOption);
+			}
 
-			// $("#results-table > tbody").empty();
-			// for(var i = 0; i < newTr.length; i++){
-			// 	$('#tbody').append(newTr[i]);
-			// }
+			$('#applicant-select-div').append(applicantSelect);
+
+			$("#results-table > tbody").empty();
+			for(var i = 0; i < newTr.length; i++){
+				$('#tbody').append(newTr[i]);
+			}
+		} else if ($('#applicant-select').val() !== "all" && $('#license-select').val() !== "all") {
+			var newTr = [];
+			for(var i = 0; i < trArr[0].length; i++){
+				if(trNamesAndLicenses[i].license_num === $('#license-select').val() && trNamesAndLicenses[i].name === $('#applicant-select').val()){
+					newTr.push(trArr[0][i]);
+				}
+			}
+			$("#results-table > tbody").empty();
+			for(var i = 0; i < newTr.length; i++){
+				$('#tbody').append(newTr[i]);
+			}
 		}
 	});
-
-	var trArrTwo = [];
-	var trLicNum = [];
-	var upNumTwo = 0;
-	$(document).on('change', '#license-select', () => {
-		if(upNumTwo == 0){
-			$('#tbody').each(() => {
-				trArrTwo.push($(this).find("tr"));
-				var tr = $(this).find("tr");
-				tr.each(function(){
-					trLicNum.push($(this).find("td").eq(5).text())
-				});
-			});
-			upNumTwo++;
-		}
-		console.log(trArrTwo);
-		console.log($('#applicant-select').val());
-	// 	if($('#applicant-select').val() === "all"){
-	// 		var elements = [];
-	// 		$("#results-table > tbody").empty();
-	// 		for(var i = 1; i < trArr[0].length; i++){
-	// 			elements.push(trArr[0][i]);
-	// 		}
-	// 		$('#tbody').append(elements);	
-	// 	} else {
-	// 		var newTr = [];
-	// 		for(var i = 0; i < trArr[0].length; i++){
-	// 			if(trNames[i] === $('#applicant-select').val()){
-	// 				newTr.push(trArr[0][i]);
-	// 			}
-	// 		}
-	// 		$("#results-table > tbody").empty();
-	// 		for(var i = 0; i < newTr.length; i++){
-	// 			$('#tbody').append(newTr[i]);
-	// 		}
-	// 	}
-	})
 
 	const boroughIt = (addr) => {
 		switch(addr){
