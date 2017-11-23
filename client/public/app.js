@@ -2,9 +2,17 @@ $(document).ready(function(){
 
 	$('#results-table').hide();
 
-	var arr;
+	var trArr;
+	var trNamesAndLicenses;
+	var upNum;
+
 	$('#loader').hide();
 	$('#search-form').on('submit', function(e){
+		trArr = [];
+		trNamesAndLicenses = [];
+		upNum = 0;
+
+
 		e.preventDefault();
 		$("#results-table > tbody").empty();
 
@@ -39,7 +47,7 @@ $(document).ready(function(){
 						var arrResult = {};
 						for (var i = 0, n = manArr.length; i < n; i++) {
 						    var item = manArr[i];
-						    arrResult[ item.applicant + " - " + item.bin_num + " - " + item.date + " - " + item.doc_num + " - " + item.input_res + " - " + item.job_num + " - " + item.job_status + " - " + item.job_type + " - " + item.license_num + " - " + item.signed_off + " - " + item.status_date ] = item;
+						    arrResult[ item.applicant.toLowerCase() + " - " + item.bin_num + " - " + item.date + " - " + item.doc_num + " - " + item.input_res + " - " + item.job_num + " - " + item.job_status + " - " + item.job_type + " - " + item.license_num + " - " + item.signed_off + " - " + item.status_date ] = item;
 						}
 						var i = 0;
 						var nonDuplicatedArray = [];    
@@ -111,6 +119,17 @@ $(document).ready(function(){
 						$('#applicant-select-div').append(select)
 						$('#license-select-div').append(licenseSelect);
 
+						var exportA = $('<a>',{
+							class: "export",
+							href: "#"
+						});
+						var exportButton = $('<button>',{
+							class: "btn btn-primary",
+							text: "Export to CSV"
+						});
+						exportA.append(exportButton);
+						$('#export-div').append(exportA);
+
 						$('#results-table').show();
 						$("#results-table > tbody").empty();
 						var newRow, dateTd, docTd, jobNumTd, jobStatusTd, jobTypeTd, licNumTd, applicantTd, statusDateTd;
@@ -142,14 +161,11 @@ $(document).ready(function(){
 				$('#pac-input').val('');
 				setTimeout(() => {
 					$('#loader').hide();
-				}, 7500)
+				}, 8500)
 			}
 		});
 	});
 
-	var trArr = [];
-	var trNamesAndLicenses = [];
-	var upNum = 0;
 	$(document).on('change', '.archie-select', () => {
 		if(upNum == 0){
 			$('#tbody').each(() => {
@@ -166,7 +182,7 @@ $(document).ready(function(){
 			var tnlDupRem = {};
 			for (var i = 0, n = trNamesAndLicenses.length; i < n; i++) {
 			    var tnlItem = trNamesAndLicenses[i];
-			    tnlDupRem[ tnlItem.name + " - " + tnlItem.license_num ] = tnlItem;
+			    tnlDupRem[ tnlItem.name.toLowerCase() + " - " + tnlItem.license_num ] = tnlItem;
 			}
 			var i = 0;
 			var nonDuplicatedArrayFour = [];    
@@ -246,7 +262,7 @@ $(document).ready(function(){
 
 			var licArray = [];
 			for(var i = 0; i < trArr[0].length; i++){
-				if(trNamesAndLicenses[i].name === $('#applicant-select').val()){
+				if(trNamesAndLicenses[i].name.toLowerCase() === $('#applicant-select').val().toLowerCase()){
 					newTr.push(trArr[0][i]);
 					licArray.push({license_num: trNamesAndLicenses[i].license_num})
 				}
@@ -300,7 +316,7 @@ $(document).ready(function(){
 			var appResultThree = {};
 			for (var i = 0, n = appArray.length; i < n; i++) {
 			    var appItem = appArray[i];
-			    appResultThree[ appItem.applicant ] = appItem;
+			    appResultThree[ appItem.applicant.toLowerCase() ] = appItem;
 			}
 			var i = 0;
 			var nonDuplicatedAppArray = [];    
@@ -329,7 +345,7 @@ $(document).ready(function(){
 		} else if ($('#applicant-select').val() !== "all" && $('#license-select').val() !== "all") {
 			var newTr = [];
 			for(var i = 0; i < trArr[0].length; i++){
-				if(trNamesAndLicenses[i].license_num === $('#license-select').val() && trNamesAndLicenses[i].name === $('#applicant-select').val()){
+				if(trNamesAndLicenses[i].license_num === $('#license-select').val() && trNamesAndLicenses[i].name.toLowerCase() === $('#applicant-select').val().toLowerCase()){
 					newTr.push(trArr[0][i]);
 				}
 			}
@@ -352,9 +368,70 @@ $(document).ready(function(){
 	}
 
 	function sortBy(ar) {
-	  return ar.sort((a, b) => a.license_num === b.license_num ?
-	      a.applicant.toString().localeCompare(b.applicant) :
-	      a.license_num.toString().localeCompare(b.license_num));
+		return ar.sort((a, b) => a.license_num === b.license_num ?
+			a.applicant.toString().localeCompare(b.applicant) :
+			a.license_num.toString().localeCompare(b.license_num));
 	}
+
+	function exportTableToCSV(filename) {
+
+		var $rows = $('#results-table').find('tr:has(th,td)'),
+
+		  tmpColDelim = String.fromCharCode(11),
+		  tmpRowDelim = String.fromCharCode(0),
+
+		  colDelim = '","',
+		  rowDelim = '"\r\n"',
+		  csv = '"' + $rows.map(function(i, row) {
+		    var $row = $(row),
+		      $cols = $row.find('th,td');
+
+		    return $cols.map(function(j, col) {
+		      var $col = $(col),
+		        text = $col.text();
+
+		      return text.replace(/"/g, '""');
+
+		    }).get().join(tmpColDelim);
+
+		  }).get().join(tmpRowDelim)
+		  .split(tmpRowDelim).join(rowDelim)
+		  .split(tmpColDelim).join(colDelim) + '"';
+		if (false && window.navigator.msSaveBlob) {
+
+		  var blob = new Blob([decodeURIComponent(csv)], {
+		    type: 'text/csv;charset=utf8'
+		  });
+
+		  window.navigator.msSaveBlob(blob, filename);
+
+		} else if (window.Blob && window.URL) {    
+		  var blob = new Blob([csv], {
+		    type: 'text/csv;charset=utf-8'
+		  });
+		  var csvUrl = URL.createObjectURL(blob);
+
+		  $(this)
+		    .attr({
+		      'download': filename,
+		      'href': csvUrl
+		    });
+		} else {
+		  var csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
+
+		  $(this)
+		    .attr({
+		      'download': filename,
+		      'href': csvData,
+		      'target': '_blank'
+		    });
+		}
+	}
+
+	$(document).on('click', '.export', function(event) {
+		var args = ['export.csv'];
+
+		exportTableToCSV.apply(this, args);
+	});
 
 });
