@@ -60,6 +60,7 @@ router.post('/second-post', function(req,res){
 		var upNum = 0
 		while(upNum <= 16){
 			request(options, function(testErr, testRes, testHtml){
+				console.log(testRes.client._httpMessage.res.request.originalCookieHeader)
 				var optionsTwo = {
 				  url: `${hostUrl}/PropertyProfileOverviewServlet?boro=${num}&houseno=${req.body.house_num}&street=${req.body.street}`,
 				  headers: {
