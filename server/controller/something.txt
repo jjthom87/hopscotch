@@ -14,6 +14,22 @@ http://a810-bisweb.nyc.gov/bisweb/JobsQueryByLocationServlet?next.x=39&next.y=14
 http://a810-bisweb.nyc.gov/bisweb/JobsQueryByLocationServlet?next.x=22&next.y=6&allbin=1016286&allcount=0161&allboroughname=&allstrt=&allnumbhous=&jobsubmdate_month=&jobsubmdate_date=&jobsubmdate_year=&allinquirytype=BXS1PRA3&alljobtype=&passdocnumber=&stcodekey=&ckbunique=&glreccountn=0000000300&requestid=5
 
 
+
+
+JSESSIONID=9877180E52A71F0659228B90597F1BC7; akavpau_wr=1511533249~id=72d08841d08abf0abe9ad27e9cdb3ab1; __utmt=1; __utma=24711658.626652818.1511328909.1511502539.1511532951.5; __utmb=24711658.2.10.1511532951; __utmc=24711658; __utmz=24711658.1511532951.5.4.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511533013995:ss=1511532944372
+
+
+JSESSIONID=002C7047EA67DCE2A03C0EB052165EA6; __utma=24711658.626652818.1511328909.1511500563.1511502539.4; __utmc=24711658; __utmz=24711658.1511502539.4.3.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; akavpau_wr=1511502999~id=ecde04c4ce3a06c79f882819961f6710; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511532949744:ss=1511532944372
+
+JSESSIONID=9877180E52A71F0659228B90597F1BC7; __utmt=1; akavpau_wr=1511533313~id=421ab56ce8763f0036a152dfc1f78b03; __utma=24711658.626652818.1511328909.1511502539.1511532951.5; __utmb=24711658.4.10.1511532951; __utmc=24711658; __utmz=24711658.1511532951.5.4.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511533374160:ss=1511532944372
+
+JSESSIONID=9877180E52A71F0659228B90597F1BC7; __utmt=1; akavpau_wr=1511533673~id=fbca43d28f071a1b3b9e092e947a97d2; __utma=24711658.626652818.1511328909.1511502539.1511532951.5; __utmb=24711658.6.10.1511532951; __utmc=24711658; __utmz=24711658.1511532951.5.4.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511533528729:ss=1511532944372
+
+
+
+
+
+
 http://a810-bisweb.nyc.gov/bisweb/JobsQueryByLocationServlet?requestid=1&allbin=1036084&allstrt=PARK%20AVENUE&allnumbhous=500
 
 http://a810-bisweb.nyc.gov/bisweb/JobsQueryByLocationServlet?allbin=1016286&requestid=2&glreccountn=0000000300&allcount=0041

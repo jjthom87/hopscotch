@@ -5,10 +5,6 @@ var cheerio = require('cheerio');
 var mongoose = require('mongoose');
 
 const hostUrl = 'http://a810-bisweb.nyc.gov/bisweb/';
-var agent = {
-	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
-	"Cookie":"JSESSIONID=EF852C1B37B79163DD67B97E2E409608; __utma=24711658.626652818.1511328909.1511328909.1511481861.2; __utmc=24711658; __utmz=24711658.1511481861.2.2.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511500557204:ss=1511500524175"
-}
 
 var router = express.Router();
 
@@ -33,6 +29,11 @@ var dataArr = [];
 var moreDataArr = [];
 var bin_num;
 router.post('/second-post', function(req,res){
+	console.log(req)
+	var agent = {
+		"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
+		"Cookie":"JSESSIONID=002C7047EA67DCE2A03C0EB052165EA6; __utma=24711658.626652818.1511328909.1511500563.1511502539.4; __utmc=24711658; __utmz=24711658.1511502539.4.3.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; akavpau_wr=1511502999~id=ecde04c4ce3a06c79f882819961f6710; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511532949744:ss=1511532944372"
+	}
 	//Building.collection.drop();
 	var inputRes = req.body.boro + " " + req.body.house_num + " " + req.body.street;
 	try {
