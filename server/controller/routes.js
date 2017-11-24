@@ -5,7 +5,7 @@ var cheerio = require('cheerio');
 var mongoose = require('mongoose');
 
 const hostUrl = 'http://a810-bisweb.nyc.gov/bisweb/';
-var agent = {"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36"}
+var agent = {"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'}
 
 var router = express.Router();
 
