@@ -29,10 +29,8 @@ var dataArr = [];
 var moreDataArr = [];
 var bin_num;
 router.post('/second-post', function(req,res){
-	console.log(req)
 	var agent = {
-		"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
-		"Cookie":"JSESSIONID=002C7047EA67DCE2A03C0EB052165EA6; __utma=24711658.626652818.1511328909.1511500563.1511502539.4; __utmc=24711658; __utmz=24711658.1511502539.4.3.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; akavpau_wr=1511502999~id=ecde04c4ce3a06c79f882819961f6710; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511532949744:ss=1511532944372"
+		"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
 	}
 	//Building.collection.drop();
 	var inputRes = req.body.boro + " " + req.body.house_num + " " + req.body.street;
@@ -60,180 +58,352 @@ router.post('/second-post', function(req,res){
 		  headers: agent
 		};
 		var upNum = 0
-		while(upNum <= 3){
+		while(upNum <= 16){
 			request(options, function(testErr, testRes, testHtml){
-			});
-			upNum++;
-		}
-		let upNumTwo = 0;
-		while(upNumTwo <= 16){
-			request(options, function(err, resOne, html){
-				if(err) {
-					console.log("Err: " + err)
-				}
-				var $ = cheerio.load(html);
-				$('.maininfo').each(function(index, element){
-					var arr = [];
-					arr.push($(element).text())
-					arr.forEach((a) => {
-						if(a.indexOf("BIN#") > -1){
-							var bin_num = a.split("#")[1].trim();
-							var moreOptions = {
-							  url: `${hostUrl}/JobsQueryByLocationServlet?requestid=1&allbin=${bin_num}`,
-							  headers: agent
-							};
-							request(moreOptions, function(error, resTwo, body){
-								if(error) {
-									console.log("Error: " + error)
-								}
-								var $ = cheerio.load(body);
-								$('body').each(function(){
-									var table = $(this).find("table").eq(5);
-									table.each(function(){
-										var tr = $(this).find("tr");
-										tr.each(function(){
-											if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") > -1){
-												var data = {
-													bin_num: bin_num,
-													date: $(this).find("td").eq(0).text(),
-													job_num: $(this).find("td").eq(1).text().trim(),
-													doc_num: $(this).find("td").eq(2).text(),
-													job_type: $(this).find("td").eq(3).text(),
-													job_status: $(this).find("td").eq(4).text(),
-													status_date: $(this).find("td").eq(5).text(),
-													license_num: $(this).find("td").eq(6).text(),
-													applicant: $(this).find("td").eq(7).text(),
-													signed_off: true,
-													input_res: inputRes
-												}
-												Building.insertMany(data);
-											}
-											if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(0).text().indexOf("/") > -1){
-												var data = {
-													bin_num: bin_num,
-													date: $(this).find("td").eq(0).text(),
-													job_num: $(this).find("td").eq(1).text().trim(),
-													doc_num: $(this).find("td").eq(2).text(),
-													job_type: $(this).find("td").eq(3).text(),
-													job_status: $(this).find("td").eq(4).text(),
-													status_date: $(this).find("td").eq(5).text(),
-													license_num: $(this).find("td").eq(6).text(),
-													applicant: $(this).find("td").eq(7).text(),
-													signed_off: false,
-													input_res: inputRes
-												}
-												Building.insertMany(data);
-											}
-											if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(5).text().indexOf("/") > -1){
-												var data = {
-													bin_num: bin_num,
-													date: $(this).find("td").eq(0).text(),
-													job_num: $(this).find("td").eq(1).text().trim(),
-													doc_num: $(this).find("td").eq(2).text(),
-													job_type: $(this).find("td").eq(3).text(),
-													job_status: $(this).find("td").eq(4).text(),
-													status_date: $(this).find("td").eq(5).text(),
-													license_num: $(this).find("td").eq(6).text(),
-													applicant: $(this).find("td").eq(7).text(),
-													signed_off: false,
-													input_res: inputRes
-												}
-												Building.insertMany(data);
-											}
-										})
-									})
-									var tableSix = $(this).find("table").eq(6);
-									tableSix.each(function(){
-										var trZero = $(this).find("tr").eq(0);
-										trZero.each(function(){
-											var tdTwo = $(this).find("input[name*='next']" ).val( "has next in it!" );
-											if(tdTwo){
-												var recount_num = parseInt($(this).find("input[name='glreccountn']").val());
-												var num_on_page = 41;
-												var zeros;
-												while (num_on_page < recount_num){
-													if(num_on_page < 100){
-														zeros = "00";
-													} else {
-														zeros = "0";
+				var optionsTwo = {
+				  url: `${hostUrl}/PropertyProfileOverviewServlet?boro=${num}&houseno=${req.body.house_num}&street=${req.body.street}`,
+				  headers: {
+				  	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
+				  	"Cookie": testRes.client._httpMessage.res.request.originalCookieHeader
+				  }
+				};
+				request(optionsTwo, function(err, resOne, html){
+					if(err) {
+						console.log("Err: " + err)
+					}
+					var $ = cheerio.load(html);
+					$('.maininfo').each(function(index, element){
+						var arr = [];
+						arr.push($(element).text())
+						arr.forEach((a) => {
+							if(a.indexOf("BIN#") > -1){
+								var bin_num = a.split("#")[1].trim();
+								var moreOptions = {
+								  url: `${hostUrl}/JobsQueryByLocationServlet?requestid=1&allbin=${bin_num}`,
+								  headers: agent
+								};
+								request(moreOptions, function(error, resTwo, body){
+									if(error) {
+										console.log("Error: " + error)
+									}
+									var $ = cheerio.load(body);
+									$('body').each(function(){
+										var table = $(this).find("table").eq(5);
+										table.each(function(){
+											var tr = $(this).find("tr");
+											tr.each(function(){
+												if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") > -1){
+													var data = {
+														bin_num: bin_num,
+														date: $(this).find("td").eq(0).text(),
+														job_num: $(this).find("td").eq(1).text().trim(),
+														doc_num: $(this).find("td").eq(2).text(),
+														job_type: $(this).find("td").eq(3).text(),
+														job_status: $(this).find("td").eq(4).text(),
+														status_date: $(this).find("td").eq(5).text(),
+														license_num: $(this).find("td").eq(6).text(),
+														applicant: $(this).find("td").eq(7).text(),
+														signed_off: true,
+														input_res: inputRes
 													}
-													var newUrl = `${hostUrl}/JobsQueryByLocationServlet?&allbin=${bin_num}&glreccountn=0000000${recount_num}&allboroughname=&allstrt=&allnumbhous=&jobsubmdate_month=&jobsubmdate_date=&jobsubmdate_year=&allinquirytype=BXS1PRA3&alljobtype=&passdocnumber=&stcodekey=&ckbunique=&allcount=${zeros}${num_on_page}`;
-													var moreMoreOptions = {
-													  url: newUrl,
-													  headers: agent
-													};
-													request(moreMoreOptions, function(errorTwo, responseTwo, bodyTwo){
-														var $ = cheerio.load(bodyTwo);
-														$('body').each(function(){
-															var table = $(this).find("table").eq(5);
-															table.each(function(){
-																var tr = $(this).find("tr");
-																tr.each(function(){
-																	if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") > -1){
-																		var dataAgain = {
-																			bin_num: bin_num,
-																			date: $(this).find("td").eq(0).text(),
-																			job_num: $(this).find("td").eq(1).text().trim(),
-																			doc_num: $(this).find("td").eq(2).text(),
-																			job_type: $(this).find("td").eq(3).text(),
-																			job_status: $(this).find("td").eq(4).text(),
-																			status_date: $(this).find("td").eq(5).text(),
-																			license_num: $(this).find("td").eq(6).text(),
-																			applicant: $(this).find("td").eq(7).text(),
-																			signed_off: true,
-																			input_res: inputRes
+													Building.insertMany(data);
+												}
+												if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(0).text().indexOf("/") > -1){
+													var data = {
+														bin_num: bin_num,
+														date: $(this).find("td").eq(0).text(),
+														job_num: $(this).find("td").eq(1).text().trim(),
+														doc_num: $(this).find("td").eq(2).text(),
+														job_type: $(this).find("td").eq(3).text(),
+														job_status: $(this).find("td").eq(4).text(),
+														status_date: $(this).find("td").eq(5).text(),
+														license_num: $(this).find("td").eq(6).text(),
+														applicant: $(this).find("td").eq(7).text(),
+														signed_off: false,
+														input_res: inputRes
+													}
+													Building.insertMany(data);
+												}
+												if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(5).text().indexOf("/") > -1){
+													var data = {
+														bin_num: bin_num,
+														date: $(this).find("td").eq(0).text(),
+														job_num: $(this).find("td").eq(1).text().trim(),
+														doc_num: $(this).find("td").eq(2).text(),
+														job_type: $(this).find("td").eq(3).text(),
+														job_status: $(this).find("td").eq(4).text(),
+														status_date: $(this).find("td").eq(5).text(),
+														license_num: $(this).find("td").eq(6).text(),
+														applicant: $(this).find("td").eq(7).text(),
+														signed_off: false,
+														input_res: inputRes
+													}
+													Building.insertMany(data);
+												}
+											})
+										})
+										var tableSix = $(this).find("table").eq(6);
+										tableSix.each(function(){
+											var trZero = $(this).find("tr").eq(0);
+											trZero.each(function(){
+												var tdTwo = $(this).find("input[name*='next']" ).val( "has next in it!" );
+												if(tdTwo){
+													var recount_num = parseInt($(this).find("input[name='glreccountn']").val());
+													var num_on_page = 41;
+													var zeros;
+													while (num_on_page < recount_num){
+														if(num_on_page < 100){
+															zeros = "00";
+														} else {
+															zeros = "0";
+														}
+														var newUrl = `${hostUrl}/JobsQueryByLocationServlet?&allbin=${bin_num}&glreccountn=0000000${recount_num}&allboroughname=&allstrt=&allnumbhous=&jobsubmdate_month=&jobsubmdate_date=&jobsubmdate_year=&allinquirytype=BXS1PRA3&alljobtype=&passdocnumber=&stcodekey=&ckbunique=&allcount=${zeros}${num_on_page}`;
+														var moreMoreOptions = {
+														  url: newUrl,
+														  headers: agent
+														};
+														request(moreMoreOptions, function(errorTwo, responseTwo, bodyTwo){
+															var $ = cheerio.load(bodyTwo);
+															$('body').each(function(){
+																var table = $(this).find("table").eq(5);
+																table.each(function(){
+																	var tr = $(this).find("tr");
+																	tr.each(function(){
+																		if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") > -1){
+																			var dataAgain = {
+																				bin_num: bin_num,
+																				date: $(this).find("td").eq(0).text(),
+																				job_num: $(this).find("td").eq(1).text().trim(),
+																				doc_num: $(this).find("td").eq(2).text(),
+																				job_type: $(this).find("td").eq(3).text(),
+																				job_status: $(this).find("td").eq(4).text(),
+																				status_date: $(this).find("td").eq(5).text(),
+																				license_num: $(this).find("td").eq(6).text(),
+																				applicant: $(this).find("td").eq(7).text(),
+																				signed_off: true,
+																				input_res: inputRes
+																			}
+																			Building.insertMany(dataAgain);
 																		}
-																		Building.insertMany(dataAgain);
-																	}
-																	if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(0).text().indexOf("/") > -1){
-																		var dataAgain = {
-																			bin_num: bin_num,
-																			date: $(this).find("td").eq(0).text(),
-																			job_num: $(this).find("td").eq(1).text().trim(),
-																			doc_num: $(this).find("td").eq(2).text(),
-																			job_type: $(this).find("td").eq(3).text(),
-																			job_status: $(this).find("td").eq(4).text(),
-																			status_date: $(this).find("td").eq(5).text(),
-																			license_num: $(this).find("td").eq(6).text(),
-																			applicant: $(this).find("td").eq(7).text(),
-																			signed_off: false,
-																			input_res: inputRes
+																		if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(0).text().indexOf("/") > -1){
+																			var dataAgain = {
+																				bin_num: bin_num,
+																				date: $(this).find("td").eq(0).text(),
+																				job_num: $(this).find("td").eq(1).text().trim(),
+																				doc_num: $(this).find("td").eq(2).text(),
+																				job_type: $(this).find("td").eq(3).text(),
+																				job_status: $(this).find("td").eq(4).text(),
+																				status_date: $(this).find("td").eq(5).text(),
+																				license_num: $(this).find("td").eq(6).text(),
+																				applicant: $(this).find("td").eq(7).text(),
+																				signed_off: false,
+																				input_res: inputRes
+																			}
+																			Building.insertMany(dataAgain);
 																		}
-																		Building.insertMany(dataAgain);
-																	}
-																	if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(5).text().indexOf("/") > -1){
-																		var data = {
-																			bin_num: bin_num,
-																			date: $(this).find("td").eq(0).text(),
-																			job_num: $(this).find("td").eq(1).text().trim(),
-																			doc_num: $(this).find("td").eq(2).text(),
-																			job_type: $(this).find("td").eq(3).text(),
-																			job_status: $(this).find("td").eq(4).text(),
-																			status_date: $(this).find("td").eq(5).text(),
-																			license_num: $(this).find("td").eq(6).text(),
-																			applicant: $(this).find("td").eq(7).text(),
-																			signed_off: false,
-																			input_res: inputRes
+																		if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(5).text().indexOf("/") > -1){
+																			var data = {
+																				bin_num: bin_num,
+																				date: $(this).find("td").eq(0).text(),
+																				job_num: $(this).find("td").eq(1).text().trim(),
+																				doc_num: $(this).find("td").eq(2).text(),
+																				job_type: $(this).find("td").eq(3).text(),
+																				job_status: $(this).find("td").eq(4).text(),
+																				status_date: $(this).find("td").eq(5).text(),
+																				license_num: $(this).find("td").eq(6).text(),
+																				applicant: $(this).find("td").eq(7).text(),
+																				signed_off: false,
+																				input_res: inputRes
+																			}
+																			Building.insertMany(data);
 																		}
-																		Building.insertMany(data);
-																	}
+																	});
 																});
 															});
 														});
-													});
-													num_on_page += 40;
+														num_on_page += 40;
+													}
 												}
-											}
+											});
 										});
-									});
-								})
-							});
-						}
-					})
+									})
+								});
+							}
+						})
+					});
 				});
 			});
-			upNumTwo++;
+			upNum++;
 		}
+		// let upNumTwo = 0;
+		// while(upNumTwo <= 16){
+		// 	request(options, function(err, resOne, html){
+		// 		if(err) {
+		// 			console.log("Err: " + err)
+		// 		}
+		// 		var $ = cheerio.load(html);
+		// 		$('.maininfo').each(function(index, element){
+		// 			var arr = [];
+		// 			arr.push($(element).text())
+		// 			arr.forEach((a) => {
+		// 				if(a.indexOf("BIN#") > -1){
+		// 					var bin_num = a.split("#")[1].trim();
+		// 					var moreOptions = {
+		// 					  url: `${hostUrl}/JobsQueryByLocationServlet?requestid=1&allbin=${bin_num}`,
+		// 					  headers: agent
+		// 					};
+		// 					request(moreOptions, function(error, resTwo, body){
+		// 						if(error) {
+		// 							console.log("Error: " + error)
+		// 						}
+		// 						var $ = cheerio.load(body);
+		// 						$('body').each(function(){
+		// 							var table = $(this).find("table").eq(5);
+		// 							table.each(function(){
+		// 								var tr = $(this).find("tr");
+		// 								tr.each(function(){
+		// 									if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") > -1){
+		// 										var data = {
+		// 											bin_num: bin_num,
+		// 											date: $(this).find("td").eq(0).text(),
+		// 											job_num: $(this).find("td").eq(1).text().trim(),
+		// 											doc_num: $(this).find("td").eq(2).text(),
+		// 											job_type: $(this).find("td").eq(3).text(),
+		// 											job_status: $(this).find("td").eq(4).text(),
+		// 											status_date: $(this).find("td").eq(5).text(),
+		// 											license_num: $(this).find("td").eq(6).text(),
+		// 											applicant: $(this).find("td").eq(7).text(),
+		// 											signed_off: true,
+		// 											input_res: inputRes
+		// 										}
+		// 										Building.insertMany(data);
+		// 									}
+		// 									if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(0).text().indexOf("/") > -1){
+		// 										var data = {
+		// 											bin_num: bin_num,
+		// 											date: $(this).find("td").eq(0).text(),
+		// 											job_num: $(this).find("td").eq(1).text().trim(),
+		// 											doc_num: $(this).find("td").eq(2).text(),
+		// 											job_type: $(this).find("td").eq(3).text(),
+		// 											job_status: $(this).find("td").eq(4).text(),
+		// 											status_date: $(this).find("td").eq(5).text(),
+		// 											license_num: $(this).find("td").eq(6).text(),
+		// 											applicant: $(this).find("td").eq(7).text(),
+		// 											signed_off: false,
+		// 											input_res: inputRes
+		// 										}
+		// 										Building.insertMany(data);
+		// 									}
+		// 									if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(5).text().indexOf("/") > -1){
+		// 										var data = {
+		// 											bin_num: bin_num,
+		// 											date: $(this).find("td").eq(0).text(),
+		// 											job_num: $(this).find("td").eq(1).text().trim(),
+		// 											doc_num: $(this).find("td").eq(2).text(),
+		// 											job_type: $(this).find("td").eq(3).text(),
+		// 											job_status: $(this).find("td").eq(4).text(),
+		// 											status_date: $(this).find("td").eq(5).text(),
+		// 											license_num: $(this).find("td").eq(6).text(),
+		// 											applicant: $(this).find("td").eq(7).text(),
+		// 											signed_off: false,
+		// 											input_res: inputRes
+		// 										}
+		// 										Building.insertMany(data);
+		// 									}
+		// 								})
+		// 							})
+		// 							var tableSix = $(this).find("table").eq(6);
+		// 							tableSix.each(function(){
+		// 								var trZero = $(this).find("tr").eq(0);
+		// 								trZero.each(function(){
+		// 									var tdTwo = $(this).find("input[name*='next']" ).val( "has next in it!" );
+		// 									if(tdTwo){
+		// 										var recount_num = parseInt($(this).find("input[name='glreccountn']").val());
+		// 										var num_on_page = 41;
+		// 										var zeros;
+		// 										while (num_on_page < recount_num){
+		// 											if(num_on_page < 100){
+		// 												zeros = "00";
+		// 											} else {
+		// 												zeros = "0";
+		// 											}
+		// 											var newUrl = `${hostUrl}/JobsQueryByLocationServlet?&allbin=${bin_num}&glreccountn=0000000${recount_num}&allboroughname=&allstrt=&allnumbhous=&jobsubmdate_month=&jobsubmdate_date=&jobsubmdate_year=&allinquirytype=BXS1PRA3&alljobtype=&passdocnumber=&stcodekey=&ckbunique=&allcount=${zeros}${num_on_page}`;
+		// 											var moreMoreOptions = {
+		// 											  url: newUrl,
+		// 											  headers: agent
+		// 											};
+		// 											request(moreMoreOptions, function(errorTwo, responseTwo, bodyTwo){
+		// 												var $ = cheerio.load(bodyTwo);
+		// 												$('body').each(function(){
+		// 													var table = $(this).find("table").eq(5);
+		// 													table.each(function(){
+		// 														var tr = $(this).find("tr");
+		// 														tr.each(function(){
+		// 															if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") > -1){
+		// 																var dataAgain = {
+		// 																	bin_num: bin_num,
+		// 																	date: $(this).find("td").eq(0).text(),
+		// 																	job_num: $(this).find("td").eq(1).text().trim(),
+		// 																	doc_num: $(this).find("td").eq(2).text(),
+		// 																	job_type: $(this).find("td").eq(3).text(),
+		// 																	job_status: $(this).find("td").eq(4).text(),
+		// 																	status_date: $(this).find("td").eq(5).text(),
+		// 																	license_num: $(this).find("td").eq(6).text(),
+		// 																	applicant: $(this).find("td").eq(7).text(),
+		// 																	signed_off: true,
+		// 																	input_res: inputRes
+		// 																}
+		// 																Building.insertMany(dataAgain);
+		// 															}
+		// 															if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(0).text().indexOf("/") > -1){
+		// 																var dataAgain = {
+		// 																	bin_num: bin_num,
+		// 																	date: $(this).find("td").eq(0).text(),
+		// 																	job_num: $(this).find("td").eq(1).text().trim(),
+		// 																	doc_num: $(this).find("td").eq(2).text(),
+		// 																	job_type: $(this).find("td").eq(3).text(),
+		// 																	job_status: $(this).find("td").eq(4).text(),
+		// 																	status_date: $(this).find("td").eq(5).text(),
+		// 																	license_num: $(this).find("td").eq(6).text(),
+		// 																	applicant: $(this).find("td").eq(7).text(),
+		// 																	signed_off: false,
+		// 																	input_res: inputRes
+		// 																}
+		// 																Building.insertMany(dataAgain);
+		// 															}
+		// 															if($(this).find("td").eq(4).text().indexOf("X SIGNED OFF") == -1 && $(this).find("td").eq(5).text().indexOf("/") > -1){
+		// 																var data = {
+		// 																	bin_num: bin_num,
+		// 																	date: $(this).find("td").eq(0).text(),
+		// 																	job_num: $(this).find("td").eq(1).text().trim(),
+		// 																	doc_num: $(this).find("td").eq(2).text(),
+		// 																	job_type: $(this).find("td").eq(3).text(),
+		// 																	job_status: $(this).find("td").eq(4).text(),
+		// 																	status_date: $(this).find("td").eq(5).text(),
+		// 																	license_num: $(this).find("td").eq(6).text(),
+		// 																	applicant: $(this).find("td").eq(7).text(),
+		// 																	signed_off: false,
+		// 																	input_res: inputRes
+		// 																}
+		// 																Building.insertMany(data);
+		// 															}
+		// 														});
+		// 													});
+		// 												});
+		// 											});
+		// 											num_on_page += 40;
+		// 										}
+		// 									}
+		// 								});
+		// 							});
+		// 						})
+		// 					});
+		// 				}
+		// 			})
+		// 		});
+		// 	});
+		// 	upNumTwo++;
+		// }
 		res.json({result: req.body.boro + " " + req.body.house_num + " " + req.body.street})
 	} catch (errz) {
 		console.log(errz)
