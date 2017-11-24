@@ -67,6 +67,7 @@ router.post('/second-post', function(req,res){
 				if(err) {
 					console.log("Err: " + err)
 				}
+				console.log(html)
 				var $ = cheerio.load(html);
 				$('.maininfo').each(function(index, element){
 					var arr = [];
