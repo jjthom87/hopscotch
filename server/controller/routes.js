@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 const hostUrl = 'http://a810-bisweb.nyc.gov/bisweb/';
 var agent = {
 	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
-	"Host":"a810-bisweb.nyc.gov"
+	"Cookie":"JSESSIONID=EF852C1B37B79163DD67B97E2E409608; __utma=24711658.626652818.1511328909.1511328909.1511481861.2; __utmc=24711658; __utmz=24711658.1511481861.2.2.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511500557204:ss=1511500524175"
 }
 
 var router = express.Router();
