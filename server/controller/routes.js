@@ -62,7 +62,7 @@ router.post('/second-post', function(req,res){
 			upNum++;
 		}
 		let upNumTwo = 0;
-		while(upNumTwo <= 12){
+		while(upNumTwo <= 16){
 			request(options, function(err, resOne, html){
 				if(err) {
 					console.log("Err: " + err)

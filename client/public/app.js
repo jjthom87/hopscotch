@@ -12,7 +12,6 @@ $(document).ready(function(){
 		trNamesAndLicenses = [];
 		upNum = 0;
 
-
 		e.preventDefault();
 		$("#results-table > tbody").empty();
 
@@ -33,6 +32,9 @@ $(document).ready(function(){
 			contentType: 'application/json',
 			dataType: 'json',
 			success: function(res){
+				$("#export-to-csv-div").remove();
+				$('#applicant-select').remove();
+				$('#license-select').remove();
 				setTimeout(() => {
 					$.ajax({
 						method: 'GET',
@@ -81,13 +83,15 @@ $(document).ready(function(){
 						}
 						var finalArrThree = sortBy(nonDuplicatedArrayThree);
 
-						$('#applicant-select').remove();
 						var select = $("<select id='applicant-select'>");
 						select.addClass('form-control archie-select');
+						var disabledAppOption = $("<option>");
+						disabledAppOption.attr('disabled', true);
+						disabledAppOption.text("Select Applicant");
 						var defaultOption = $("<option>");
 						defaultOption.attr('value', 'all');
-						defaultOption.text("All");
-						select.append(defaultOption);
+						defaultOption.text("All Applicants");
+						select.append(disabledAppOption).append(defaultOption);
 						var applicants = [];
 						finalArrTwo.forEach((arr) => {
 							applicants.push(arr.applicant);
@@ -100,13 +104,15 @@ $(document).ready(function(){
 							select.append(option);
 						});
 
-						$('#license-select').remove();
 						var licenseSelect = $("<select id='license-select'>");
 						licenseSelect.addClass('form-control archie-select');
+						var disabledLicOption = $("<option>");
+						disabledLicOption.attr('disabled', true);
+						disabledLicOption.text("Select License");
 						var defaultLicOption = $("<option>");
 						defaultLicOption.attr('value', 'all');
-						defaultLicOption.text("All");
-						licenseSelect.append(defaultLicOption);
+						defaultLicOption.text("All Licenses");
+						licenseSelect.append(disabledLicOption).append(defaultLicOption);
 						var licOption;
 						finalArrThree.forEach((app) => {
 							licOption = $("<option>");
@@ -119,6 +125,7 @@ $(document).ready(function(){
 						$('#applicant-select-div').append(select)
 						$('#license-select-div').append(licenseSelect);
 
+						var exportDiv = $('<div id="export-to-csv-div">')
 						var exportA = $('<a>',{
 							class: "export",
 							href: "#"
@@ -128,7 +135,8 @@ $(document).ready(function(){
 							text: "Export to CSV"
 						});
 						exportA.append(exportButton);
-						$('#export-div').append(exportA);
+						exportDiv.append(exportA);
+						$('#export-div').append(exportDiv);
 
 						$('#results-table').show();
 						$("#results-table > tbody").empty();
@@ -156,12 +164,12 @@ $(document).ready(function(){
 							$('#tbody').append(newRow)
 						}
 					});
-				}, 6500);
+				}, 6000);
 				$('#loader').show();
 				$('#pac-input').val('');
 				setTimeout(() => {
 					$('#loader').hide();
-				}, 8500)
+				}, 10000)
 			}
 		});
 	});
@@ -214,17 +222,23 @@ $(document).ready(function(){
 			$('#license-select').remove();
 			var licenseSelect = $("<select id='license-select'>");
 			licenseSelect.addClass('form-control archie-select');
+			var disabledLicOption = $("<option>");
+			disabledLicOption.attr('disabled', true);
+			disabledLicOption.text("Select License");
 			var defaultLicOption = $("<option>");
 			defaultLicOption.attr('value', 'all');
-			defaultLicOption.text("All");
-			licenseSelect.append(defaultLicOption);
+			defaultLicOption.text("All Licenses");
+			licenseSelect.append(disabledLicOption).append(defaultLicOption);
 
 			$('#applicant-select').remove();
 			var select = $("<select id='applicant-select'>");
 			select.addClass('form-control archie-select');
+			var disabledOption = $("<option>");
+			disabledOption.attr('disabled', true);
+			disabledOption.text("Select Applicant");
 			var defaultOption = $("<option>");
 			defaultOption.attr('value', 'all');
-			defaultOption.text("All");
+			defaultOption.text("All Applicants");
 			select.append(defaultOption);
 
 			for(var i = 1; i < trArr[0].length; i++){
@@ -255,10 +269,13 @@ $(document).ready(function(){
 			$('#license-select').remove();
 			var licenseSelect = $("<select id='license-select'>");
 			licenseSelect.addClass('form-control archie-select');
+			var disabledLicOption = $("<option>");
+			disabledLicOption.attr('disabled', true);
+			disabledLicOption.text("Select License");
 			var defaultLicOption = $("<option>");
 			defaultLicOption.attr('value', 'all');
-			defaultLicOption.text("All");
-			licenseSelect.append(defaultLicOption);
+			defaultLicOption.text("All Licenses");
+			licenseSelect.append(disabledLicOption).append(defaultLicOption);
 
 			var licArray = [];
 			for(var i = 0; i < trArr[0].length; i++){
@@ -301,10 +318,13 @@ $(document).ready(function(){
 			$('#applicant-select').remove();
 			var applicantSelect = $("<select id='applicant-select'>");
 			applicantSelect.addClass('form-control archie-select');
+			var disabledAppOption = $("<option>");
+			disabledAppOption.attr('disabled', true);
+			disabledAppOption.text("Select Applicant");
 			var defaultAppOption = $("<option>");
 			defaultAppOption.attr('value', 'all');
-			defaultAppOption.text("All");
-			applicantSelect.append(defaultAppOption);
+			defaultAppOption.text("All Applicants");
+			applicantSelect.append(disabledAppOption).append(defaultAppOption);
 
 			var appArray = [];
 			for(var i = 0; i < trArr[0].length; i++){
@@ -410,7 +430,6 @@ $(document).ready(function(){
 		    type: 'text/csv;charset=utf-8'
 		  });
 		  var csvUrl = URL.createObjectURL(blob);
-
 		  $(this)
 		    .attr({
 		      'download': filename,
@@ -418,7 +437,6 @@ $(document).ready(function(){
 		    });
 		} else {
 		  var csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
-
 		  $(this)
 		    .attr({
 		      'download': filename,
@@ -430,7 +448,6 @@ $(document).ready(function(){
 
 	$(document).on('click', '.export', function(event) {
 		var args = ['export.csv'];
-
 		exportTableToCSV.apply(this, args);
 	});
 
