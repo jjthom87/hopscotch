@@ -30,7 +30,9 @@ var moreDataArr = [];
 var bin_num;
 router.post('/second-post', function(req,res){
 	var agent = {
-		"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+		"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
+		"Host": 'a810-bisweb.nyc.gov',
+		"Referer":'http://www1.nyc.gov/site/buildings/index.page'
 	}
 	//Building.collection.drop();
 	var inputRes = req.body.boro + " " + req.body.house_num + " " + req.body.street;
@@ -65,7 +67,8 @@ router.post('/second-post', function(req,res){
 				  url: `${hostUrl}/PropertyProfileOverviewServlet?boro=${num}&houseno=${req.body.house_num}&street=${req.body.street}`,
 				  headers: {
 				  	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
-				  	"Cookie": "whatever dawg"
+					"Host": 'a810-bisweb.nyc.gov',
+					"Referer":'http://www1.nyc.gov/site/buildings/index.page'
 				  }
 				};
 				request(optionsTwo, function(err, resOne, html){
