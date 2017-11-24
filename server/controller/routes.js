@@ -33,7 +33,7 @@ router.post('/second-post', function(req,res){
 	var agent = {
 	  	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
 	  	"Connection":'keep-alive',
-		"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; akavpau_wr=1511557126~id=89f856c1d82586f0bca27af3339bd0e3; __utmt=1; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.2.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227"
+		"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227; akavpau_wr=1511557567~id=2c8fe2abf3f7546810aaee512f192d0f; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.4.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page"
 	}
 	//Building.collection.drop();
 	var inputRes = req.body.boro + " " + req.body.house_num + " " + req.body.street;
@@ -61,7 +61,7 @@ router.post('/second-post', function(req,res){
 		  headers: {
 		  	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
 		  	"Connection":'keep-alive',
-			"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; akavpau_wr=1511557126~id=89f856c1d82586f0bca27af3339bd0e3; __utmt=1; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.2.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227"
+			"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227; akavpau_wr=1511557567~id=2c8fe2abf3f7546810aaee512f192d0f; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.4.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page"
 		  }
 		};
 		var upNum = 0
@@ -73,7 +73,7 @@ router.post('/second-post', function(req,res){
 				  headers: {
   					"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
 				  	"Connection":'keep-alive',
-					"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; akavpau_wr=1511557126~id=89f856c1d82586f0bca27af3339bd0e3; __utmt=1; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.2.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227"
+					"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227; akavpau_wr=1511557567~id=2c8fe2abf3f7546810aaee512f192d0f; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.4.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page"
 				  }
 				};
 				request(optionsTwo, function(err, resOne, html){
@@ -93,7 +93,7 @@ router.post('/second-post', function(req,res){
 								  headers: {
 								  	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
 								  	"Connection":'keep-alive',
-									"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; akavpau_wr=1511557126~id=89f856c1d82586f0bca27af3339bd0e3; __utmt=1; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.2.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227"
+									"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227; akavpau_wr=1511557567~id=2c8fe2abf3f7546810aaee512f192d0f; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.4.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page"
 								  }
 								};
 								request(moreOptions, function(error, resTwo, body){
