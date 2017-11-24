@@ -239,7 +239,7 @@ $(document).ready(function(){
 			var defaultOption = $("<option>");
 			defaultOption.attr('value', 'all');
 			defaultOption.text("All Applicants");
-			select.append(defaultOption);
+			select.append(disabledOption).append(defaultOption);
 
 			for(var i = 1; i < trArr[0].length; i++){
 				elements.push(trArr[0][i]);
