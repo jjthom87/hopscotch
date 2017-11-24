@@ -56,7 +56,9 @@ router.post('/second-post', function(req,res){
 		}
 		var options = {
 		  url: `${hostUrl}/PropertyProfileOverviewServlet?boro=${num}&houseno=${req.body.house_num}&street=${req.body.street}`,
-		  headers: agent
+		  headers: {
+		  	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+		  }
 		};
 		var upNum = 0
 		while(upNum <= 16){
@@ -82,7 +84,9 @@ router.post('/second-post', function(req,res){
 								var bin_num = a.split("#")[1].trim();
 								var moreOptions = {
 								  url: `${hostUrl}/JobsQueryByLocationServlet?requestid=1&allbin=${bin_num}`,
-								  headers: agent
+								  headers: {
+								  	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+								  }
 								};
 								request(moreOptions, function(error, resTwo, body){
 									if(error) {
