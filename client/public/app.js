@@ -35,6 +35,7 @@ $(document).ready(function(){
 				$("#export-to-csv-div").remove();
 				$('#applicant-select').remove();
 				$('#license-select').remove();
+				$('#so_input_div').remove();
 				setTimeout(() => {
 					$.ajax({
 						method: 'GET',
@@ -140,7 +141,7 @@ $(document).ready(function(){
 
 						var so_arr = ["All", "Yes", "No"]
 						var soInputDiv = $('<div id="so_input_div">');
-						soInputDiv.css({margin: '5px',display: 'inline-flex'});
+						soInputDiv.css({margin: '5px', display: 'inline-flex'});
 						var str = "Signed Off: "
 						for(var i = 0; i < so_arr.length; i++){
 							str += "<input class='archie-select' type='radio' name='signed_off' style='margin: 5px;' value=" + so_arr[i] + "> " + so_arr[i] + "<br>"
