@@ -13,6 +13,7 @@ $(document).ready(function(){
 		upNum = 0;
 
 		e.preventDefault();
+		$('#results-table').hide();
 		$("#results-table > tbody").empty();
 
 		var split = $("#pac-input").val().split(",");
