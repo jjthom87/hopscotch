@@ -58,8 +58,7 @@ router.post('/second-post', function(req,res){
 		var options = {
 		  url: `${hostUrl}/PropertyProfileOverviewServlet?boro=${num}&houseno=${req.body.house_num}&street=${req.body.street}`,
 		  headers: {
-		  	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
-			"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227; akavpau_wr=1511557567~id=2c8fe2abf3f7546810aaee512f192d0f; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.4.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page"
+		  	"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
 		  }
 		};
 		var upNum = 0
@@ -69,9 +68,8 @@ router.post('/second-post', function(req,res){
 				var optionsTwo = {
 				  url: `${hostUrl}/PropertyProfileOverviewServlet?boro=${num}&houseno=${req.body.house_num}&street=${req.body.street}`,
 				  headers: {
-  					"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
-					"Cookie":"JSESSIONID=ADC6C972A825902FA1602C0E07D4D53D; WT_FPC=id=d5fe4446-c0eb-4418-a991-429c50da9a60:lv=1511557267710:ss=1511556806227; akavpau_wr=1511557567~id=2c8fe2abf3f7546810aaee512f192d0f; __utma=24711658.626652818.1511328909.1511545866.1511556827.7; __utmb=24711658.4.10.1511556827; __utmc=24711658; __utmz=24711658.1511556827.7.6.utmcsr=www1.nyc.gov|utmccn=(referral)|utmcmd=referral|utmcct=/site/buildings/index.page"
-				  }
+  					"User-Agent":'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+  				  }
 				};
 				request(optionsTwo, function(err, resOne, html){
 					console.log(resOne)
